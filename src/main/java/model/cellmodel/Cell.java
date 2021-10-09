@@ -16,8 +16,6 @@ public class Cell {
 
     protected static final int HORIZONTAL_CHANCE=30, VERTICAL_CHANCE=15;
 
-    protected int distance;
-
     @Getter @Setter
     protected boolean leftWall, rightWall, topWall, bottomWall;
 

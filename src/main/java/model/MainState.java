@@ -18,8 +18,8 @@ public class MainState extends GameState{
     @Setter
     private Node solution;
 
-    public Node start = new Node(0,0,0,null,null);
-    public Node end = new Node(SIZE-1,SIZE-1,0,null,null);
+    public Node start = new Node(0,0,null,null);
+    public Node end = new Node(SIZE-1,SIZE-1,null,null);
 
     private boolean update=true;
 
