@@ -40,8 +40,9 @@ public class PathFindTree {
         index=0;
         cells=getCells();
         updating=false;
-        start = new Node(startX,startY,null,this);
+        start = new Node(startX,startY,0,null,this);
         cells[startY][startX].setVisited(true);
+        cells[startY][startX].setDistance(0);
         path.add(start);
     }
 
@@ -69,9 +70,11 @@ public class PathFindTree {
 
             for (int i=0; i<children.size();i++) {
                 Node child = children.get(i);
-                if (!cells[child.getY()][child.getX()].isVisited()) {
+                if (!cells[child.getY()][child.getX()].isVisited()||
+                        (child.getDistance()<cells[child.getY()][child.getX()].getDistance())) {
                     path.add(child);
                     prev.add(child);
+                    cells[child.getY()][child.getX()].setDistance(child.getDistance());
                     cells[child.getY()][child.getX()].setVisited(true);
                 }
             }
@@ -90,7 +93,7 @@ public class PathFindTree {
         VirtualCell[][] cells = new VirtualCell[area.length][area[0].length];
         for (int i=0;i<area.length;i++) {
             for (int x=0; x<area[i].length; x++) {
-                cells[i][x] = new VirtualCell(x,i,false);
+                cells[i][x] = new VirtualCell(x,i,0,false);
             }
         }
         return cells;
@@ -102,8 +105,9 @@ public class PathFindTree {
 
         VirtualCell[][] nodes = getCells();
 
-        Node start = new Node(startX,startY,null,this);
+        Node start = new Node(startX,startY,0,null,this);
         nodes[startY][startX].setVisited(true);
+        nodes[startY][startX].setDistance(0);
 
 
         int ind=0;
@@ -122,9 +126,11 @@ public class PathFindTree {
 
             for (int z=0; z<children.size();z++) {
                 Node child = children.get(z);
-                if (!nodes[child.getY()][child.getX()].isVisited()) {
+                if (!nodes[child.getY()][child.getX()].isVisited()||
+                        (child.getDistance()<nodes[child.getY()][child.getX()].getDistance())) {
                     path.add(child);
                     nodes[child.getY()][child.getX()].setVisited(true);
+                    nodes[child.getY()][child.getX()].setDistance(child.getDistance());
                 }
             }
             ind++;
@@ -143,6 +149,8 @@ public class PathFindTree {
         private final int x;
         @Getter
         private final int y;
+        @Getter @Setter
+        private int distance;
         @Getter @Setter
         private boolean visited;
     }
