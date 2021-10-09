@@ -9,17 +9,17 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 
 
-public class MainState extends GameState{
+public class MainState extends State {
 
-    public static int SIZE=100;
+    public static final int SIZE=100;
 
     private PathFindTree pathFindTree;
 
     @Setter
     private Node solution;
 
-    public Node start = new Node(0,0,null,null);
-    public Node end = new Node(SIZE-1,SIZE-1,null,null);
+    public final Node start = new Node(0,0,null,null);
+    public final Node end = new Node(SIZE-1,SIZE-1,null,null);
 
     private boolean update=true;
 
@@ -29,7 +29,7 @@ public class MainState extends GameState{
     public Cell[][] area;
 
 
-    public MainState(GameStateManager gsm) {
+    public MainState(StateManager gsm) {
         super(gsm);
         init();
     }
@@ -52,31 +52,29 @@ public class MainState extends GameState{
                 target[i][x]=new Cell(x,i);
             }
         }
-        correctHorizontally(target);
-        correctVertically(target);
+        correct(target);
+        //correctVertically(target);
         PathFindTree pathFindTree = new PathFindTree(target,start.getX(),start.getY(),end.getX(),end.getY(), this);
         if (pathFindTree.pathExist()) return target;
+        System.out.println("re-do");
         return initializeArea();
 
     }
 
-    private void correctHorizontally(Cell[][] area) {
+    private void correct(Cell[][] area) {
 
         for (int i=0; i<area.length;i++) {
             for(int x=0;x<area[i].length;x++) {
-
                 if (x==0) {
                     Cell leftCell = area[i][x];
                     Cell rightCell = area[i][x+1];
                     if (leftCell.isRightWall()) rightCell.setLeftWall(true);
                     if (rightCell.isLeftWall()) leftCell.setRightWall(true);
-
                 } else if (x==SIZE-1) {
                     Cell leftCell = area[i][x-1];
                     Cell rightCell = area[i][x];
                     if (leftCell.isRightWall()) rightCell.setLeftWall(true);
                     if (rightCell.isLeftWall()) leftCell.setRightWall(true);
-
                 } else {
                     Cell leftCell = area[i][x-1];
                     Cell centreCell = area[i][x];
@@ -86,39 +84,29 @@ public class MainState extends GameState{
                     if (centreCell.isLeftWall()) leftCell.setRightWall(true);
                     if (centreCell.isRightWall()) rightCell.setLeftWall(true);
                     if (rightCell.isLeftWall()) centreCell.setRightWall(true);
-
                 }
-            }
-        }
 
-    }
+                if (i==0) {
 
-    private void correctVertically(Cell[][] area) {
-
-        for (int x=0; x<area.length;x++) {
-            for (int y=0; y<area[x].length; y++) {
-
-                if (y==0) {
-
-                    Cell topCell = area[y][x];
-                    Cell bottomCell = area[y+1][x];
+                    Cell topCell = area[i][x];
+                    Cell bottomCell = area[i+1][x];
 
                     if (topCell.isBottomWall()) bottomCell.setTopWall(true);
                     if (bottomCell.isTopWall()) topCell.setBottomWall(true);
 
-                } else if (y==SIZE-1) {
+                } else if (i==SIZE-1) {
 
-                    Cell bottomCell = area[y][x];
-                    Cell topCell = area[y-1][x];
+                    Cell bottomCell = area[i][x];
+                    Cell topCell = area[i-1][x];
 
                     if (topCell.isBottomWall()) bottomCell.setTopWall(true);
                     if (bottomCell.isTopWall()) topCell.setBottomWall(true);
 
                 } else {
 
-                    Cell topCell = area[y-1][x];
-                    Cell centreCell = area[y][x];
-                    Cell bottomCell = area[y+1][x];
+                    Cell topCell = area[i-1][x];
+                    Cell centreCell = area[i][x];
+                    Cell bottomCell = area[i+1][x];
 
                     if (topCell.isBottomWall()) centreCell.setTopWall(true);
                     if (centreCell.isTopWall()) topCell.setBottomWall(true);
@@ -137,10 +125,9 @@ public class MainState extends GameState{
         if (pathFindTree.isUpdating()) pathFindTree.update();
         if(solution!=null) {
             if (update) {
-                for (int i = 0; i < area.length; i++) {
-                    for (int x = 0; x < area[i].length; x++) {
-                        area[i][x].setPassThrough(false);
-                        //System.out.println(i+" "+x);
+                for (Cell[] cells : area) {
+                    for (Cell cell : cells) {
+                        cell.setPassThrough(false);
                     }
                 }
 
@@ -170,11 +157,11 @@ public class MainState extends GameState{
     @Override
     public void draw(Graphics g) {
         g.setColor(Color.black);
-        g.fillRect(0,0,GamePanel.WIDTH,GamePanel.HEIGHT);
+        g.fillRect(0,0, Panel.WIDTH, Panel.HEIGHT);
 
-        for (int i=0; i<area.length;i++) {
-            for (int x=0; x<area[i].length;x++) {
-                area[i][x].draw(g);
+        for (Cell[] cells : area) {
+            for (Cell cell : cells) {
+                cell.draw(g);
             }
         }
     }

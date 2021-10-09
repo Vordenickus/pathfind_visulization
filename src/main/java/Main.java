@@ -1,4 +1,4 @@
-import model.GamePanel;
+import model.Panel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,7 +11,7 @@ public class Main {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
         frame.setLayout(new BorderLayout());
-        frame.add(new GamePanel(), BorderLayout.CENTER);
+        frame.add(new Panel(), BorderLayout.CENTER);
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);

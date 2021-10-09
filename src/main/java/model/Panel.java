@@ -5,20 +5,19 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class GamePanel extends JPanel implements Runnable, KeyListener {
+public class Panel extends JPanel implements Runnable, KeyListener {
 
     public static final int WIDTH=1000, HEIGHT=1000;
 
     private Thread mainThread;
     private boolean isRunning=false;
 
-    private final int FPS=600;
-    private long targetTime=1000/FPS;
+    private static final int FPS=1000;
 
-    private GameStateManager gsm;
+    private StateManager gsm;
 
 
-    public GamePanel() {
+    public Panel() {
         setPreferredSize(new Dimension(WIDTH,HEIGHT));
 
         addKeyListener(this);
@@ -39,7 +38,9 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 
         long start, elapsed, wait;
 
-        gsm = new GameStateManager();
+        long targetTime = 1000 / FPS;
+
+        gsm = new StateManager();
 
         while (isRunning) {
 
@@ -51,14 +52,13 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
             elapsed = System.nanoTime()-start;
             wait = targetTime - elapsed/1_000_000;
 
+
             if (wait<0) {
                 wait=5;
             }
 
             try {
-
                 Thread.sleep(wait);
-
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

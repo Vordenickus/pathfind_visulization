@@ -6,9 +6,9 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 
 @AllArgsConstructor
-public abstract class GameState {
+public abstract class State {
 
-    protected GameStateManager gsm;
+    protected StateManager gsm;
 
     public abstract void init();
     public abstract void tick();

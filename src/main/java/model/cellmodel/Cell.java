@@ -3,7 +3,7 @@ package model.cellmodel;
 
 import lombok.Getter;
 import lombok.Setter;
-import model.GamePanel;
+import model.Panel;
 import model.MainState;
 
 import java.awt.*;
@@ -14,12 +14,10 @@ public class Cell {
 
     protected int width, height;
 
-    protected static final int HORIZONTAL_CHANCE=30, VERTICAL_CHANCE=15;
+    protected static final int HORIZONTAL_CHANCE=40, VERTICAL_CHANCE=20;
 
     @Getter @Setter
     protected boolean leftWall, rightWall, topWall, bottomWall;
-
-    protected boolean visited=false;
 
     @Getter @Setter
     protected boolean partOfThePath=false;
@@ -31,7 +29,7 @@ public class Cell {
         this.x=x;
         this.y=y;
         initializeWall();
-        width = GamePanel.WIDTH/MainState.SIZE;
+        width = Panel.WIDTH/MainState.SIZE;
         height=width;
     }
 

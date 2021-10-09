@@ -4,11 +4,11 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.Stack;
 
-public class GameStateManager {
+public class StateManager {
 
-    public Stack<GameState> states;
+    public Stack<State> states;
 
-    public GameStateManager() {
+    public StateManager() {
         states = new Stack<>();
 
         states.push(new MainState(this));
