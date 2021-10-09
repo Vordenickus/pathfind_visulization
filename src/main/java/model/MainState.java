@@ -25,6 +25,9 @@ public class MainState extends State {
 
     public int count=0;
 
+    public int failCount=0;
+    public long timeSaved=0;
+
 
     public Cell[][] area;
 
@@ -45,6 +48,8 @@ public class MainState extends State {
 
     private Cell[][] initializeArea() {
 
+        if (timeSaved==0) timeSaved=System.currentTimeMillis();
+
         Cell[][] target = new Cell[SIZE][SIZE];
 
         for (int i=0; i<SIZE;i++) {
@@ -53,10 +58,14 @@ public class MainState extends State {
             }
         }
         correct(target);
-        //correctVertically(target);
         PathFindTree pathFindTree = new PathFindTree(target,start.getX(),start.getY(),end.getX(),end.getY(), this);
-        if (pathFindTree.pathExist()) return target;
-        System.out.println("re-do");
+        if (pathFindTree.pathExist()) {
+            System.out.printf("Done in %d attempt in %d ms\n", failCount+1,System.currentTimeMillis()-timeSaved);
+            timeSaved=0;
+            failCount=0;
+            return target;
+        }
+        failCount++;
         return initializeArea();
 
     }
@@ -87,7 +96,6 @@ public class MainState extends State {
                 }
 
                 if (i==0) {
-
                     Cell topCell = area[i][x];
                     Cell bottomCell = area[i+1][x];
 
@@ -103,7 +111,6 @@ public class MainState extends State {
                     if (bottomCell.isTopWall()) topCell.setBottomWall(true);
 
                 } else {
-
                     Cell topCell = area[i-1][x];
                     Cell centreCell = area[i][x];
                     Cell bottomCell = area[i+1][x];
